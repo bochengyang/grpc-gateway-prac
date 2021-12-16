@@ -9,11 +9,11 @@ import (
 	"google.golang.org/grpc"
 )
 
-// server is used to implement helloworld.GreeterServer.
-type server struct{}
+// ServiceHandlers is used to implement helloworld.GreeterServer.
+type ServiceHandlers struct{}
 
 // SayHello implements helloworld.GreeterServer
-func (s *server) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
+func (s *ServiceHandlers) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
 	log.Printf("Received: %v", in.Name)
 	return &helloworld.HelloReply{Message: "Hello " + in.Name}, nil
 }
@@ -30,7 +30,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	log.Println("gRPC server is running.")
-	helloworld.RegisterGreeterServer(s, &server{})
+	helloworld.RegisterGreeterServer(s, &ServiceHandlers{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

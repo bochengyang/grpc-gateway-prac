@@ -4,12 +4,14 @@ import (
 	"context"
 	"flag"
 	"net/http"
+	"os"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
 	gw "github.com/bochengyang/grpc-gateway-prac/pkg/helloworld" // Update
+	"github.com/gorilla/handlers"
 )
 
 var (
@@ -33,7 +35,7 @@ func run() error {
 	}
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
-	return http.ListenAndServe(":8081", mux)
+	return http.ListenAndServe(":8081", handlers.LoggingHandler(os.Stdout, mux))
 }
 
 func main() {
