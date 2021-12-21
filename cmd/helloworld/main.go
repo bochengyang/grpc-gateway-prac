@@ -7,6 +7,7 @@ import (
 
 	"github.com/bochengyang/grpc-gateway-prac/pkg/helloworld"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 // ServiceHandlers is used to implement helloworld.GreeterServer.
@@ -28,7 +29,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
+	// Create tls based credential.
+	creds, err := credentials.NewServerTLSFromFile("./ssl/tls.crt", "./ssl/tls.key")
+	if err != nil {
+		log.Fatalf("failed to create credentials: %v", err)
+	}
+	s := grpc.NewServer(grpc.Creds(creds))
 	log.Println("gRPC server is running.")
 	helloworld.RegisterGreeterServer(s, &ServiceHandlers{})
 	if err := s.Serve(lis); err != nil {
