@@ -14,14 +14,22 @@ service Greeter {
       get: "/v1/helloworld/hello/{name}"
     };
   }
+  rpc AuthSayHello (HelloRequest) returns (HelloReply) {
+    option (google.api.http) = {
+      get: "/v1/helloworld/authhello/{name}"
+    };
+  }
 }
 
 // The request message containing the user's name.
 message HelloRequest {
   string name = 1;
+  repeated string name_array = 2;
 }
 
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
+  repeated string name_array = 2;
+  int32 count = 3;
 }
